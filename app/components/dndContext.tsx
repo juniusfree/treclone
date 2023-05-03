@@ -1,94 +1,103 @@
 "use client";
 
-import { DndContext, DragOverlay } from "@dnd-kit/core";
 import { useState } from "react";
-import ListDroppableComponent, { ListDroppableProps } from "./listDroppable";
+import {
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
+  UniqueIdentifier,
+} from "@dnd-kit/core";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
+import ListDroppableComponent, { ListDroppableProps } from "./listDroppable";
 import CardDraggableComponent, { CardDraggableProps } from "./cardDraggable";
 
+const findList = (lists?: ListDroppableProps[], id?: UniqueIdentifier) =>
+  lists?.find((list) => list?.cards?.find((card) => card.id === id)) ||
+  lists?.find((list) => list.id === id);
+
 const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
-  const [listsData, setListsData] = useState(lists);
-  const [activeCard, setActiveCard] = useState<CardDraggableProps | null>();
-
-  const activeCardId = activeCard?.id;
-
-  const activeCardList = listsData.find((list) =>
-    list?.cards?.find((card) => card.id === activeCardId)
+  const [listsData, setListsData] = useState<ListDroppableProps[] | undefined>(
+    lists
+  );
+  const [activeDraggableId, setActiveDraggableId] =
+    useState<UniqueIdentifier>("");
+  const activeDraggableList = findList(listsData, activeDraggableId);
+  const activeDraggableListId = activeDraggableList?.id;
+  const activeDraggableListIndex = listsData?.findIndex(
+    (list) => list === activeDraggableList
+  );
+  const activeCardData = activeDraggableList?.cards.find(
+    (card) => card.id === activeDraggableId
   );
 
-  const activeCardListId = activeCardList?.id;
-  const activeCardListIndex = listsData.findIndex(
-    (list) => list === activeCardList
-  );
-
-  const activeCardData = activeCardList?.cards.find(
-    (i) => i.id === activeCardId
-  );
-
-  const handleOnDragStart = (event) => {
-    setActiveCard(event.active);
+  const handleOnDragStart = (event: DragStartEvent) => {
+    setActiveDraggableId(event.active.id);
   };
 
-  const handleOnDragOver = (event) => {
+  const handleOnDragOver = (event: DragOverEvent) => {
     const overId = event?.over?.id;
 
-    if (!overId) return;
-    if (overId === activeCardId) return;
+    if (!overId || overId === activeDraggableId) return;
 
     setListsData((prev) => {
       const prevCopy = [...prev];
 
-      const overList =
-        prev.find((list) => list?.cards?.find((card) => card.id === overId)) ||
-        prev.find((list) => list.id === overId);
-
+      const overList = findList(prev, overId);
       const overListId = overList?.id;
       const overListCards = overList?.cards;
       const overListIndex = prevCopy.findIndex((list) => list === overList);
 
-      if (activeCardListId === overListId) return prev;
+      if (activeDraggableListId === overListId) return prev;
 
-      const activeCardListUpdatedCards = activeCardList.cards.filter(
-        (i) => i.id !== activeCardId
-      );
+      if (activeCardData) {
+        // handles sorting when a card is dragged
+        const activeDraggableListUpdatedCards =
+          activeDraggableList?.cards.filter((i) => i.id !== activeDraggableId);
 
-      const overListUpdatedCards = [activeCardData, ...overListCards];
+        const overListUpdatedCards = [activeCardData, ...overListCards];
 
-      prevCopy[activeCardListIndex] = {
-        ...prevCopy[activeCardListIndex],
-        cards: activeCardListUpdatedCards,
-      };
-      prevCopy[overListIndex] = {
-        ...prevCopy[overListIndex],
-        cards: overListUpdatedCards,
-      };
+        prevCopy[activeDraggableListIndex] = {
+          ...prevCopy[activeDraggableListIndex],
+          cards: activeDraggableListUpdatedCards,
+        };
+        prevCopy[overListIndex] = {
+          ...prevCopy[overListIndex],
+          cards: overListUpdatedCards,
+        };
+        return prevCopy;
+      }
+
+      prevCopy[overListIndex] = activeDraggableList;
+      prevCopy[activeDraggableListIndex] = overList;
+
       return prevCopy;
     });
   };
 
-  const handleOnDragEnd = (event) => {
+  const handleOnDragEnd = (event: DragEndEvent) => {
     const overId = event?.over?.id;
-    if (!(overId || activeCardListId)) return;
+    if (!(overId || activeDraggableListId) || !activeCardData) return;
 
     setListsData((prev) => {
-      const overList =
-        prev.find((list) => list?.cards?.find((card) => card.id === overId)) ||
-        prev.find((list) => list.id === overId);
-
-      const overListId = overList.id;
-      const overListCards = overList.cards;
+      const overList = findList(prev, overId);
+      const overListId = overList?.id;
+      const overListCards = overList?.cards;
 
       const prevCopy = [...prev];
 
-      if (activeCardListId === overListId) {
+      if (activeDraggableListId === overListId) {
         // Handles sorting on the same list
         const overListIndex = prevCopy.findIndex(
-          (i) => i.id === activeCardListId
+          (i) => i.id === activeDraggableListId
         );
-        const oldIndex = overListCards.findIndex((i) => i.id === activeCardId);
-        const overIdCard = overListCards.find((i) => i.id === overId);
+        const oldIndex = overListCards?.findIndex(
+          (i) => i.id === activeDraggableId
+        );
+        const overIdCard = overListCards?.find((i) => i.id === overId);
         const newIndex = overIdCard
-          ? overListCards.findIndex((i) => i === overIdCard)
+          ? overListCards?.findIndex((i) => i === overIdCard)
           : 0;
         prevCopy[overListIndex] = {
           ...prevCopy[overListIndex],
@@ -100,7 +109,7 @@ const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
       return prevCopy;
     });
 
-    setActiveCard(null);
+    setActiveDraggableId("");
   };
 
   return (
@@ -109,21 +118,17 @@ const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
       onDragOver={handleOnDragOver}
       onDragStart={handleOnDragStart}
     >
-      {listsData?.map(({ id, ...props }) => (
-        <ListDroppableComponent
-          key={id}
-          id={id}
-          activeCardId={activeCardId}
-          {...props}
-        />
-      ))}
+      <SortableContext items={listsData}>
+        {listsData?.map(({ id, ...props }) => (
+          <ListDroppableComponent key={id} id={id} {...props} />
+        ))}
+      </SortableContext>
       <DragOverlay>
-        {activeCardId ? (
-          <CardDraggableComponent
-            title={activeCardData?.title || ""}
-            id={activeCardId}
-          />
-        ) : null}
+        {activeCardData ? (
+          <CardDraggableComponent {...activeCardData} />
+        ) : (
+          <ListDroppableComponent {...activeDraggableList} />
+        )}
       </DragOverlay>
     </DndContext>
   );
