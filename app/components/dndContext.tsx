@@ -20,6 +20,7 @@ import {
   useBoardContext,
   useBoardDispatcherContext,
 } from "./BoardDataContext";
+import AddListComponent from "./addList";
 
 const DndContextComponent = () => {
   const currentBoard = useBoardContext();
@@ -100,9 +101,12 @@ const DndContextComponent = () => {
       sensors={sensors}
     >
       <SortableContext items={listsData}>
-        {listsData?.map(({ id, ...props }) => (
-          <ListDroppableComponent key={id} id={id} {...props} />
-        ))}
+        <div className="flex items-start gap-4">
+          {listsData?.map(({ id, ...props }) => (
+            <ListDroppableComponent key={id} id={id} {...props} />
+          ))}
+          <AddListComponent />
+        </div>
       </SortableContext>
       <DragOverlay>
         {activeCardData ? (

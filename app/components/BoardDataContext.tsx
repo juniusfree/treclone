@@ -216,6 +216,22 @@ const boardReducer = (boardsRaw, action) => {
     }
     return boards;
   }
+
+  if (action.type === "add list") {
+    const { data } = action;
+    const { title, boardId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = [...currentBoard?.lists];
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists: lists.concat({ id: uuidv4(), title, cards: [] }),
+    };
+    return boards;
+  }
+
   if (action.type === "edit list") {
     console.log("edit list");
     const { data } = action;
