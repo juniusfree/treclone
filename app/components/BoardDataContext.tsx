@@ -216,6 +216,26 @@ const boardReducer = (boardsRaw, action) => {
     }
     return boards;
   }
+  if (action.type === "edit list") {
+    console.log("edit list");
+    const { data } = action;
+    const { title, boardId, listId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = [...currentBoard?.lists];
+    const listToBeUpdatedIndex = lists.findIndex((list) => list.id === listId);
+    lists[listToBeUpdatedIndex] = {
+      ...lists[listToBeUpdatedIndex],
+      title,
+    };
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists,
+    };
+    return boards;
+  }
   return boards;
 };
 
