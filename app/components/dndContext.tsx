@@ -7,27 +7,28 @@ import {
   DragOverEvent,
   DragOverlay,
   DragStartEvent,
+  PointerSensor,
   UniqueIdentifier,
+  useSensor,
+  useSensors,
 } from "@dnd-kit/core";
-import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import ListDroppableComponent, { ListDroppableProps } from "./listDroppable";
-import CardDraggableComponent, { CardDraggableProps } from "./cardDraggable";
+import { SortableContext } from "@dnd-kit/sortable";
+import ListDroppableComponent from "./listDroppable";
+import CardDraggableComponent from "./cardDraggable";
+import {
+  findList,
+  useBoardContext,
+  useBoardDispatcherContext,
+} from "./BoardDataContext";
 
-const findList = (lists?: ListDroppableProps[], id?: UniqueIdentifier) =>
-  lists?.find((list) => list?.cards?.find((card) => card.id === id)) ||
-  lists?.find((list) => list.id === id);
-
-const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
-  const [listsData, setListsData] = useState<ListDroppableProps[] | undefined>(
-    lists
-  );
+const DndContextComponent = () => {
+  const currentBoard = useBoardContext();
+  const dispatch = useBoardDispatcherContext();
+  const listsData = currentBoard?.lists;
   const [activeDraggableId, setActiveDraggableId] =
     useState<UniqueIdentifier>("");
   const activeDraggableList = findList(listsData, activeDraggableId);
   const activeDraggableListId = activeDraggableList?.id;
-  const activeDraggableListIndex = listsData?.findIndex(
-    (list) => list === activeDraggableList
-  );
   const activeCardData = activeDraggableList?.cards.find(
     (card) => card.id === activeDraggableId
   );
@@ -41,38 +42,30 @@ const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
 
     if (!overId || overId === activeDraggableId) return;
 
-    setListsData((prev) => {
-      const prevCopy = [...prev];
+    const overListId = findList(listsData, overId)?.id;
+    if (activeDraggableListId === overListId) return;
 
-      const overList = findList(prev, overId);
-      const overListId = overList?.id;
-      const overListCards = overList?.cards;
-      const overListIndex = prevCopy.findIndex((list) => list === overList);
+    if (activeCardData) {
+      // handles sorting when a card is dragged
+      dispatch({
+        type: "move card",
+        data: {
+          activeCardData,
+          activeDraggableId,
+          boardId: currentBoard.id,
+          overId,
+        },
+      });
+      return;
+    }
 
-      if (activeDraggableListId === overListId) return prev;
-
-      if (activeCardData) {
-        // handles sorting when a card is dragged
-        const activeDraggableListUpdatedCards =
-          activeDraggableList?.cards.filter((i) => i.id !== activeDraggableId);
-
-        const overListUpdatedCards = [activeCardData, ...overListCards];
-
-        prevCopy[activeDraggableListIndex] = {
-          ...prevCopy[activeDraggableListIndex],
-          cards: activeDraggableListUpdatedCards,
-        };
-        prevCopy[overListIndex] = {
-          ...prevCopy[overListIndex],
-          cards: overListUpdatedCards,
-        };
-        return prevCopy;
-      }
-
-      prevCopy[overListIndex] = activeDraggableList;
-      prevCopy[activeDraggableListIndex] = overList;
-
-      return prevCopy;
+    dispatch({
+      type: "sort lists",
+      data: {
+        overId,
+        activeDraggableId,
+        boardId: currentBoard.id,
+      },
     });
   };
 
@@ -80,43 +73,31 @@ const DndContextComponent = ({ lists }: { lists: ListDroppableProps[] }) => {
     const overId = event?.over?.id;
     if (!(overId || activeDraggableListId) || !activeCardData) return;
 
-    setListsData((prev) => {
-      const overList = findList(prev, overId);
-      const overListId = overList?.id;
-      const overListCards = overList?.cards;
-
-      const prevCopy = [...prev];
-
-      if (activeDraggableListId === overListId) {
-        // Handles sorting on the same list
-        const overListIndex = prevCopy.findIndex(
-          (i) => i.id === activeDraggableListId
-        );
-        const oldIndex = overListCards?.findIndex(
-          (i) => i.id === activeDraggableId
-        );
-        const overIdCard = overListCards?.find((i) => i.id === overId);
-        const newIndex = overIdCard
-          ? overListCards?.findIndex((i) => i === overIdCard)
-          : 0;
-        prevCopy[overListIndex] = {
-          ...prevCopy[overListIndex],
-          cards: arrayMove(overListCards, oldIndex, newIndex),
-        };
-        return prevCopy;
-      }
-
-      return prevCopy;
+    dispatch({
+      type: "sort cards",
+      data: {
+        boardId: currentBoard.id,
+        activeDraggableId,
+        overId,
+      },
     });
-
     setActiveDraggableId("");
   };
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 4,
+      },
+    })
+  );
 
   return (
     <DndContext
       onDragEnd={handleOnDragEnd}
       onDragOver={handleOnDragOver}
       onDragStart={handleOnDragStart}
+      sensors={sensors}
     >
       <SortableContext items={listsData}>
         {listsData?.map(({ id, ...props }) => (
