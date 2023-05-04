@@ -5,14 +5,12 @@ import { useBoardContext, useBoardDispatcherContext } from "./BoardDataContext";
 const AddCard = ({ listId }: { listId: string }) => {
   const currentBoard = useBoardContext();
   const dispatch = useBoardDispatcherContext();
-  const [isEditing, setIsEditing] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
   const [inputValue, setInputValue] = useState("");
 
-  const toggleIsEditing = () => setIsEditing((prev) => !prev);
+  const toggleIsCreating = () => setIsCreating((prev) => !prev);
 
-  const handleAddCard = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleAddCard = () => {
     dispatch({
       type: "add card",
       data: {
@@ -21,11 +19,11 @@ const AddCard = ({ listId }: { listId: string }) => {
         listId,
       },
     });
-    toggleIsEditing();
+    toggleIsCreating();
     setInputValue("");
   };
 
-  if (isEditing) {
+  if (isCreating) {
     return (
       <div className="flex flex-col gap-2">
         <input
@@ -36,7 +34,7 @@ const AddCard = ({ listId }: { listId: string }) => {
         />
         <div className="flex items-center gap-2">
           <button onClick={handleAddCard}>Add Card</button>
-          <button onClick={toggleIsEditing} className="h-6 w-6">
+          <button onClick={toggleIsCreating} className="h-6 w-6">
             <XMarkIcon />
           </button>
         </div>
@@ -46,7 +44,7 @@ const AddCard = ({ listId }: { listId: string }) => {
 
   return (
     <div
-      onClick={toggleIsEditing}
+      onClick={toggleIsCreating}
       className="flex items-center hover:bg-gray-200 h-fit p-1 rounded gap-2"
     >
       <PlusIcon className="w-4 h-4" /> Add Card
