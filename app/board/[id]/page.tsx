@@ -1,8 +1,5 @@
-import BoardContextComponent from "@/app/components/BoardDataContext";
-import DndContextComponent from "@/app/components/dndContext";
+import BoardIdComponent from "@/app/components/boardId";
 
-const BoardPage = async ({ params }: { params: { id: string } }) => (
-  <BoardContextComponent boardId={params.id} />
-);
+const BoardIdPage = async (props) => <BoardIdComponent {...props} />;
 
-export default BoardPage;
+export default BoardIdPage;

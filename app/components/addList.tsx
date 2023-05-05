@@ -1,10 +1,11 @@
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { useBoardContext, useBoardDispatcherContext } from "./BoardDataContext";
+import { useBoardIdContext } from "./boardId";
+import { useBoardDispatcherContext } from "./boardsContext";
 
 const AddListComponent = () => {
   const dispatch = useBoardDispatcherContext();
-  const currentBoard = useBoardContext();
+  const currentBoard = useBoardIdContext();
   const [isAddingList, setIsAddlingList] = useState(false);
   const [title, setTitle] = useState("");
   const toggleIsAddingList = () => setIsAddlingList((prev) => !prev);

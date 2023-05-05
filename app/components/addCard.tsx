@@ -1,9 +1,10 @@
 import { PlusIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
-import { useBoardContext, useBoardDispatcherContext } from "./BoardDataContext";
+import { useBoardIdContext } from "./boardId";
+import { useBoardDispatcherContext } from "./boardsContext";
 
 const AddCard = ({ listId }: { listId: string }) => {
-  const currentBoard = useBoardContext();
+  const currentBoard = useBoardIdContext();
   const dispatch = useBoardDispatcherContext();
   const [isCreating, setIsCreating] = useState(false);
   const [inputValue, setInputValue] = useState("");

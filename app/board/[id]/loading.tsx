@@ -1,3 +1,3 @@
-const BoardLoading = () => <p>Loading...</p>;
+const BoardIdLoadingComponent = () => <p>Loading...</p>;
 
-export default BoardLoading;
+export default BoardIdLoadingComponent;

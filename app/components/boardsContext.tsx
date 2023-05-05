@@ -1,26 +1,10 @@
 "use client";
 
-import {
-  Dispatch,
-  createContext,
-  useContext,
-  useReducer,
-  useState,
-} from "react";
-import DndContextComponent from "./dndContext";
-import { v4 as uuidv4 } from "uuid";
-import { ListDroppableProps } from "./listDroppable";
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-
-const BoardContext = createContext({ currentBoard: null });
-
-export const useBoardContext = () => useContext(BoardContext);
-
-const BoardDispatcherContext = createContext<Dispatch<any>>(null);
-
-export const useBoardDispatcherContext = () =>
-  useContext(BoardDispatcherContext);
+import { Dispatch, createContext, useContext, useReducer } from "react";
+import { v4 as uuidv4 } from "uuid";
+import { ListDroppableProps } from "./listDroppable";
 
 const initialData = [
   {
@@ -71,6 +55,23 @@ const initialData = [
     lists: [],
   },
 ];
+
+const BoardsContext = createContext(initialData);
+
+export const useBoardsContext = () => {
+  const context = useContext(BoardsContext);
+  if (context === null) {
+    throw new Error(
+      "useBoardContext must be used within a BoardContext.Provider"
+    );
+  }
+  return context;
+};
+
+const BoardDispatcherContext = createContext<Dispatch<any>>(null);
+
+export const useBoardDispatcherContext = () =>
+  useContext(BoardDispatcherContext);
 
 const findBoard = (boards, boardId) => {
   const boardIndex = boards.findIndex((board) => board.id === boardId);
@@ -255,19 +256,19 @@ const boardReducer = (boardsRaw, action) => {
   return boards;
 };
 
-const BoardContextComponent = ({ boardId }: { boardId: string }) => {
-  const [board, dispatch] = useReducer(boardReducer, initialData);
-  const boardIndex = board.findIndex((board) => board.id === boardId);
-  const currentBoard = board?.[boardIndex];
+const BoardsContextComponent = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [boards, dispatch] = useReducer(boardReducer, initialData);
   return (
-    <BoardContext.Provider value={currentBoard}>
+    <BoardsContext.Provider value={boards}>
       <BoardDispatcherContext.Provider value={dispatch}>
-        <div className="flex gap-4">
-          <DndContextComponent />
-        </div>
+        <div className="flex gap-4">{children}</div>
       </BoardDispatcherContext.Provider>
-    </BoardContext.Provider>
+    </BoardsContext.Provider>
   );
 };
 
-export default BoardContextComponent;
+export default BoardsContextComponent;

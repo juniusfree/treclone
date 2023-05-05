@@ -1,11 +1,12 @@
 import { useDroppable } from "@dnd-kit/core";
-import CardDraggableComponent, { CardDraggableProps } from "./cardDraggable";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import AddCard from "./addCard";
-import { useState } from "react";
-import { useBoardContext, useBoardDispatcherContext } from "./BoardDataContext";
 import { XMarkIcon } from "@heroicons/react/20/solid";
+import { useState } from "react";
+import AddCard from "./addCard";
+import { useBoardIdContext } from "./boardId";
+import { useBoardDispatcherContext } from "./boardsContext";
+import CardDraggableComponent, { CardDraggableProps } from "./cardDraggable";
 
 export type ListDroppableProps = {
   id: string;
@@ -34,7 +35,7 @@ const ListDroppableComponent = ({
     transform: CSS.Transform.toString(transform),
     transition,
   };
-  const currentBoard = useBoardContext();
+  const currentBoard = useBoardIdContext();
   const dispatcher = useBoardDispatcherContext();
   const [listTitle, setListTitle] = useState(title);
   const [isEditing, setIsEditing] = useState(false);

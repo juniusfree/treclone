@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import {
   DndContext,
   DragEndEvent,
@@ -13,17 +12,15 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { SortableContext } from "@dnd-kit/sortable";
-import ListDroppableComponent from "./listDroppable";
-import CardDraggableComponent from "./cardDraggable";
-import {
-  findList,
-  useBoardContext,
-  useBoardDispatcherContext,
-} from "./BoardDataContext";
+import { useState } from "react";
 import AddListComponent from "./addList";
+import { useBoardIdContext } from "./boardId";
+import { findList, useBoardDispatcherContext } from "./boardsContext";
+import CardDraggableComponent from "./cardDraggable";
+import ListDroppableComponent from "./listDroppable";
 
 const DndContextComponent = () => {
-  const currentBoard = useBoardContext();
+  const currentBoard = useBoardIdContext();
   const dispatch = useBoardDispatcherContext();
   const listsData = currentBoard?.lists;
   const [activeDraggableId, setActiveDraggableId] =
