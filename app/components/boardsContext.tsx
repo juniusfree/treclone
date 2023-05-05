@@ -9,6 +9,7 @@ import { ListDroppableProps } from "./listDroppable";
 const initialData = [
   {
     id: "1",
+    title: "board 1",
     lists: [
       {
         id: "list-1",
@@ -52,6 +53,7 @@ const initialData = [
   },
   {
     id: "2",
+    title: "board 2",
     lists: [],
   },
 ];
