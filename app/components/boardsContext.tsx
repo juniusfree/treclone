@@ -255,6 +255,17 @@ const boardReducer = (boardsRaw, action) => {
     };
     return boards;
   }
+
+  if (action.type === "add board") {
+    console.log("add board");
+    const { data } = action;
+    const { title } = data;
+    return boards.concat({
+      title,
+      id: uuidv4(),
+      lists: [],
+    });
+  }
   return boards;
 };
 
