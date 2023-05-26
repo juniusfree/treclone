@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import AddCard from "./addCard";
 import { useBoardIdContext } from "./boardId";
@@ -51,11 +51,20 @@ const ListDroppableComponent = ({
     });
     toggleIsEditing();
   };
+  const handleOnDelete = () => {
+    dispatcher({
+      type: "delete list",
+      data: {
+        boardId: currentBoard.id,
+        listId: id,
+      },
+    });
+  };
   return (
     <div
       ref={setNodeRefSortable}
       style={style}
-      className={`relative w-60 p-4 rounded h-fit bg-gray-100 ${
+      className={`group relative w-60 p-4 rounded h-fit bg-gray-100 ${
         isDragging && "opacity-50"
       }`}
       {...listeners}
@@ -82,9 +91,17 @@ const ListDroppableComponent = ({
               </div>
             </div>
           ) : (
-            <p className="font-bold text-lg py-4" onClick={toggleIsEditing}>
-              {title}
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="font-bold text-lg py-4" onClick={toggleIsEditing}>
+                {title}
+              </p>
+              <button
+                onClick={handleOnDelete}
+                className="w-4 h-4 hidden group-hover:block"
+              >
+                <TrashIcon />
+              </button>
+            </div>
           )}
           <div className="flex flex-col gap-2">
             {cards?.map(({ id, ...props }) => (

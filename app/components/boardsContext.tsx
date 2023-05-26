@@ -295,6 +295,23 @@ const boardReducer = (boardsRaw, action) => {
     return boards;
   }
 
+  if (action.type === "delete list") {
+    const { data } = action;
+    const { boardId, listId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = [...currentBoard?.lists];
+    const listToBeDeletedIndex = lists.findIndex((list) => list.id === listId);
+    lists.splice(listToBeDeletedIndex, 1);
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists,
+    };
+    return boards;
+  }
+
   if (action.type === "add board") {
     console.log("add board");
     const { data } = action;
