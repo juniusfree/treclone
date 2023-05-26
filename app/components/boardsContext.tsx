@@ -114,34 +114,6 @@ const boardReducer = (boardsRaw, action) => {
     return boards;
   }
 
-  if (action.type === "sort lists") {
-    console.log("sort lists");
-    const { data } = action;
-    const { activeDraggableId, boardId, overId } = data;
-    const currentBoard = findBoard(boards, boardId);
-    const currentBoardIndex = boards.findIndex(
-      (board) => board === currentBoard
-    );
-    const lists = currentBoard?.lists;
-    const activeDraggableList = findList(lists, activeDraggableId);
-    const activeDraggableListIndex = lists?.findIndex(
-      (list) => list === activeDraggableList
-    );
-    const overList = findList(lists, overId);
-    const overListIndex = lists.findIndex((list) => list === overList);
-
-    const updatedLists = arrayMove(
-      lists,
-      activeDraggableListIndex,
-      overListIndex
-    );
-    boards[currentBoardIndex] = {
-      ...currentBoard,
-      lists: updatedLists,
-    };
-    return boards;
-  }
-
   if (action.type === "move card") {
     console.log("move card");
     const { data } = action;
@@ -174,6 +146,45 @@ const boardReducer = (boardsRaw, action) => {
       ...currentBoard,
       lists,
     };
+    return boards;
+  }
+
+  if (action.type === "edit card") {
+    console.log("edit card");
+    const { data } = action;
+    const { title, boardId, cardId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = [...currentBoard?.lists];
+    const listToBeUpdated = findList(lists, cardId);
+    const listToBeUpdatedIndex = lists?.findIndex(
+      (list) => list === listToBeUpdated
+    );
+    const listToBeUpdatedCards = listToBeUpdated?.cards || [];
+    const cardToBeUpdated = listToBeUpdatedCards?.find(
+      ({ id }) => id === cardId
+    );
+    const cardToBeUpdatedIndex = listToBeUpdatedCards?.findIndex(
+      ({ id }) => id === cardId
+    );
+    listToBeUpdatedCards[cardToBeUpdatedIndex] = {
+      ...cardToBeUpdated,
+      id: cardId,
+      title,
+    };
+
+    lists[listToBeUpdatedIndex] = {
+      ...listToBeUpdated,
+      cards: listToBeUpdatedCards,
+    };
+
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists,
+    };
+
     return boards;
   }
 
@@ -217,6 +228,34 @@ const boardReducer = (boardsRaw, action) => {
       };
       return boards;
     }
+    return boards;
+  }
+
+  if (action.type === "sort lists") {
+    console.log("sort lists");
+    const { data } = action;
+    const { activeDraggableId, boardId, overId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = currentBoard?.lists;
+    const activeDraggableList = findList(lists, activeDraggableId);
+    const activeDraggableListIndex = lists?.findIndex(
+      (list) => list === activeDraggableList
+    );
+    const overList = findList(lists, overId);
+    const overListIndex = lists.findIndex((list) => list === overList);
+
+    const updatedLists = arrayMove(
+      lists,
+      activeDraggableListIndex,
+      overListIndex
+    );
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists: updatedLists,
+    };
     return boards;
   }
 
@@ -266,6 +305,7 @@ const boardReducer = (boardsRaw, action) => {
       lists: [],
     });
   }
+
   return boards;
 };
 
