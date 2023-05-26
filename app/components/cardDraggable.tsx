@@ -1,6 +1,6 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { XMarkIcon } from "@heroicons/react/20/solid";
+import { TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useBoardIdContext } from "./boardId";
 import { useBoardDispatcherContext } from "./boardsContext";
@@ -41,6 +41,16 @@ const CardDraggableComponent = ({ title, id }: CardDraggableProps) => {
     });
   };
 
+  const handleOnDelete = () => {
+    dispatch({
+      type: "delete card",
+      data: {
+        cardId: id,
+        boardId: board.id,
+      },
+    });
+  };
+
   if (isEditing) {
     return (
       <div className="relative w-fit-content rounded h-fit bg-gray-100">
@@ -65,13 +75,19 @@ const CardDraggableComponent = ({ title, id }: CardDraggableProps) => {
       onClick={toggleIsEditing}
       ref={setNodeRef}
       style={style}
-      className={`group rounded shadow border px-2 h-10 cursor-pointer flex justify-between bg-gray-50 ${
+      className={`group/card rounded shadow border px-2 h-10 cursor-pointer flex justify-between items-center bg-gray-50 ${
         isDragging && "opacity-50"
       } `}
       {...listeners}
       {...attributes}
     >
-      {title}
+      <p>{title}</p>
+      <button
+        onClick={handleOnDelete}
+        className="w-4 h-4 hidden group-hover/card:block"
+      >
+        <TrashIcon />
+      </button>
     </div>
   );
 };

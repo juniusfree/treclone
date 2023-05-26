@@ -231,6 +231,37 @@ const boardReducer = (boardsRaw, action) => {
     return boards;
   }
 
+  if (action.type === "delete card") {
+    const { data } = action;
+    const { boardId, cardId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    const lists = [...currentBoard?.lists];
+    const listToBeUpdated = findList(lists, cardId);
+    const listToBeUpdatedIndex = lists?.findIndex(
+      (list) => list === listToBeUpdated
+    );
+    const listToBeUpdatedCards = listToBeUpdated?.cards || [];
+    const cardToBeUpdatedIndex = listToBeUpdatedCards?.findIndex(
+      ({ id }) => id === cardId
+    );
+    listToBeUpdatedCards.splice(cardToBeUpdatedIndex, 1);
+
+    lists[listToBeUpdatedIndex] = {
+      ...listToBeUpdated,
+      cards: listToBeUpdatedCards,
+    };
+
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      lists,
+    };
+
+    return boards;
+  }
+
   if (action.type === "sort lists") {
     console.log("sort lists");
     const { data } = action;
