@@ -98,7 +98,7 @@ const DndContextComponent = () => {
       sensors={sensors}
     >
       <SortableContext items={listsData}>
-        <div className="flex items-start gap-4">
+        <div className="flex w-fit items-start gap-4">
           {listsData?.map(({ id, ...props }) => (
             <ListDroppableComponent key={id} id={id} {...props} />
           ))}

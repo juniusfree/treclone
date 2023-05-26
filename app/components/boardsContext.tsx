@@ -354,6 +354,21 @@ const boardReducer = (boardsRaw, action) => {
     });
   }
 
+  if (action.type === "edit board") {
+    console.log("edit board");
+    const { data } = action;
+    const { title, boardId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    boards[currentBoardIndex] = {
+      ...currentBoard,
+      title,
+    };
+    return boards;
+  }
+
   return boards;
 };
 

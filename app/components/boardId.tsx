@@ -3,6 +3,7 @@
 import { useBoardsContext } from "@/app/components/boardsContext";
 import DndContextComponent from "@/app/components/dndContext";
 import { createContext, useContext } from "react";
+import BoardIdHeaderComponent from "./boardIdHeader";
 
 type BoardIdComponentProps = {
   params: {
@@ -10,7 +11,7 @@ type BoardIdComponentProps = {
   };
 };
 
-const BoardIdContext = createContext({ id: "", lists: [] });
+const BoardIdContext = createContext({ id: "", lists: [], title: "" });
 
 export const useBoardIdContext = () => {
   const context = useContext(BoardIdContext);
@@ -28,7 +29,10 @@ const BoardIdComponent = ({ params }: BoardIdComponentProps) => {
   if (!currentBoard) return null;
   return (
     <BoardIdContext.Provider value={currentBoard}>
-      <DndContextComponent />
+      <div className="flex flex-col w-full overflow-auto">
+        <BoardIdHeaderComponent />
+        <DndContextComponent />
+      </div>
     </BoardIdContext.Provider>
   );
 };
