@@ -369,6 +369,18 @@ const boardReducer = (boardsRaw, action) => {
     return boards;
   }
 
+  if (action.type === "delete board") {
+    console.log("delete board");
+    const { data } = action;
+    const { boardId } = data;
+    const currentBoard = findBoard(boards, boardId);
+    const currentBoardIndex = boards.findIndex(
+      (board) => board === currentBoard
+    );
+    boards.splice(currentBoardIndex, 1);
+    return boards;
+  }
+
   return boards;
 };
 

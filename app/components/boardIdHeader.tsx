@@ -1,3 +1,5 @@
+import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
+import Link from "next/link";
 import { useState } from "react";
 import { useBoardIdContext } from "./boardId";
 import { useBoardDispatcherContext } from "./boardsContext";
@@ -22,6 +24,15 @@ const BoardIdHeaderComponent = () => {
     });
   };
 
+  const handleDelete = () => {
+    dispatch({
+      type: "delete board",
+      data: {
+        boardId: board.id,
+      },
+    });
+  };
+
   if (isEditing) {
     return (
       <div className="bg-gray-500 w-full">
@@ -39,10 +50,20 @@ const BoardIdHeaderComponent = () => {
   }
 
   return (
-    <div className="bg-gray-500 w-full">
+    <div className="group/header bg-gray-500 w-full flex">
       <p onClick={toggleIsEditing} className="cursor-pointer">
         {title}
       </p>
+      <PencilIcon
+        className="h-5 w-5 cursor-pointer hidden group-hover/header:block"
+        onClick={toggleIsEditing}
+      />
+      <Link href="/">
+        <TrashIcon
+          className="h-5 w-5 cursor-pointer hidden group-hover/header:block"
+          onClick={handleDelete}
+        />
+      </Link>
     </div>
   );
 };
