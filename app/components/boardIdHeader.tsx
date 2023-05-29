@@ -35,35 +35,42 @@ const BoardIdHeaderComponent = () => {
 
   if (isEditing) {
     return (
-      <div className="bg-gray-500 w-full">
+      <div className="group/header bg-sky-200 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
         <input
-          className="bg-gray-500"
-          type="text"
+          autoFocus
+          className="w-48 outline outline-gray-300 px-1 rounded text-sm h-8"
           value={newTitle}
           onChange={(e) => setNewTitle(e.target.value)}
+          maxLength={20}
         />
-        <button className="bg-gray-500" onClick={handleOnSave}>
-          Save
+        <button
+          onClick={handleOnSave}
+          className={`text-sm h-8 flex items-center p-1 rounded bg-sky-700 text-white hover:bg-sky-900 disabled:bg-gray-300`}
+          disabled={!title}
+        >
+          Update
         </button>
       </div>
     );
   }
 
   return (
-    <div className="group/header bg-gray-500 w-full flex">
-      <p onClick={toggleIsEditing} className="cursor-pointer">
+    <div className="group/header bg-sky-200 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
+      <p onClick={toggleIsEditing} className="cursor-pointer font-semibold">
         {title}
       </p>
-      <PencilIcon
-        className="h-5 w-5 cursor-pointer hidden group-hover/header:block"
-        onClick={toggleIsEditing}
-      />
-      <Link href="/">
-        <TrashIcon
-          className="h-5 w-5 cursor-pointer hidden group-hover/header:block"
-          onClick={handleDelete}
+      <div className="flex gap-2">
+        <PencilIcon
+          className="h-4 w-4 cursor-pointer hidden group-hover/header:block text-sky-900"
+          onClick={toggleIsEditing}
         />
-      </Link>
+        <Link href="/">
+          <TrashIcon
+            className="h-4 w-4 cursor-pointer hidden group-hover/header:block text-sky-900"
+            onClick={handleDelete}
+          />
+        </Link>
+      </div>
     </div>
   );
 };

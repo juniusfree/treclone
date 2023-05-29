@@ -29,7 +29,7 @@ const BoardIdComponent = ({ params }: BoardIdComponentProps) => {
   if (!currentBoard) return null;
   return (
     <BoardIdContext.Provider value={currentBoard}>
-      <div className="flex flex-col w-full overflow-auto">
+      <div className="relative">
         <BoardIdHeaderComponent />
         <DndContextComponent />
       </div>

@@ -393,7 +393,7 @@ const BoardsContextComponent = ({
   return (
     <BoardsContext.Provider value={boards}>
       <BoardDispatcherContext.Provider value={dispatch}>
-        <div className="flex gap-4">{children}</div>
+        {children}
       </BoardDispatcherContext.Provider>
     </BoardsContext.Provider>
   );
