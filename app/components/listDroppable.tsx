@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import AddCard from "./addCard";
 import { useBoardIdContext } from "./boardId";
@@ -75,32 +75,50 @@ const ListDroppableComponent = ({
           {isEditing ? (
             <div>
               <input
-                placeholder="Enter a title"
-                className="w-full"
+                className="w-full outline outline-gray-300 p-1 rounded text-sm"
                 type="text"
+                placeholder="Add a title"
                 value={listTitle}
                 onChange={(e) => setListTitle(e.target.value)}
               />
-              <div className="flex items-center">
-                <button onClick={handleOnSave} disabled={!listTitle.length}>
-                  Save
+              <div className="w-full flex items-center justify-between py-2">
+                <button
+                  onClick={handleOnSave}
+                  className="text-sm p-1 rounded bg-sky-700 text-white hover:bg-sky-900 disabled:bg-gray-300"
+                  disabled={!listTitle}
+                >
+                  Create
                 </button>
-                <button onClick={toggleIsEditing} className="h-6 w-6">
-                  <XMarkIcon />
+                <button
+                  onClick={toggleIsEditing}
+                  className="text-sm p-1 rounded text-sky-700"
+                >
+                  Cancel
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="font-bold text-lg py-4" onClick={toggleIsEditing}>
+              <p
+                className="font-bold text-lg py-4 w-full"
+                onClick={toggleIsEditing}
+              >
                 {title}
               </p>
-              <button
-                onClick={handleOnDelete}
-                className="w-4 h-4 hidden group-hover:block"
-              >
-                <TrashIcon />
-              </button>
+              <div className="flex gap-2 text-sky-900">
+                <button
+                  onClick={toggleIsEditing}
+                  className="w-4 h-4 hidden group-hover:block"
+                >
+                  <PencilIcon />
+                </button>
+                <button
+                  onClick={handleOnDelete}
+                  className="w-4 h-4 hidden group-hover:block"
+                >
+                  <TrashIcon />
+                </button>
+              </div>
             </div>
           )}
           <div className="flex flex-col gap-2">
