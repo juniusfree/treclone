@@ -60,10 +60,19 @@ const CardDraggableComponent = ({ title, id }: CardDraggableProps) => {
           className="w-full h-10 rounded shadow border px-2"
           onChange={(e) => setCardTitle(e.target.value)}
         />
-        <div className="flex items-center gap-2">
-          <button onClick={handleSaveEdit}>Save Edit</button>
-          <button onClick={toggleIsEditing} className="h-6 w-6">
-            <XMarkIcon />
+        <div className="w-full flex items-center justify-between py-2">
+          <button
+            onClick={handleSaveEdit}
+            className="text-sm p-1 rounded bg-sky-700 text-white hover:bg-sky-900 disabled:bg-gray-300"
+            disabled={!cardTitle}
+          >
+            Update
+          </button>
+          <button
+            onClick={toggleIsEditing}
+            className="text-sm p-1 rounded text-sky-700"
+          >
+            Cancel
           </button>
         </div>
       </div>

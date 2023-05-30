@@ -32,11 +32,21 @@ const AddCard = ({ listId }: { listId: string }) => {
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           placeholder="Enter title"
+          className="w-full outline outline-gray-300 p-1 rounded text-sm"
         />
-        <div className="flex items-center gap-2">
-          <button onClick={handleAddCard}>Add Card</button>
-          <button onClick={toggleIsCreating} className="h-6 w-6">
-            <XMarkIcon />
+        <div className="w-full flex items-center justify-between py-2">
+          <button
+            onClick={handleAddCard}
+            className="text-sm p-1 rounded bg-sky-700 text-white hover:bg-sky-900 disabled:bg-gray-300"
+            disabled={!inputValue}
+          >
+            Add Card
+          </button>
+          <button
+            onClick={toggleIsCreating}
+            className="text-sm p-1 rounded text-sky-700"
+          >
+            Cancel
           </button>
         </div>
       </div>
