@@ -107,7 +107,7 @@ const DndContextComponent = () => {
       </SortableContext>
       <DragOverlay>
         {activeCardData ? (
-          <CardDraggableComponent {...activeCardData} />
+          <CardDraggableComponent {...activeCardData} isDragOverlay />
         ) : (
           <ListDroppableComponent {...activeDraggableList} />
         )}

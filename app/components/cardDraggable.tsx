@@ -8,9 +8,14 @@ import { useBoardDispatcherContext } from "./boardsContext";
 export type CardDraggableProps = {
   title: string;
   id: string;
+  isDragOverlay?: boolean;
 };
 
-const CardDraggableComponent = ({ title, id }: CardDraggableProps) => {
+const CardDraggableComponent = ({
+  title,
+  id,
+  isDragOverlay = false,
+}: CardDraggableProps) => {
   const {
     attributes,
     listeners,
@@ -84,9 +89,8 @@ const CardDraggableComponent = ({ title, id }: CardDraggableProps) => {
       onClick={toggleIsEditing}
       ref={setNodeRef}
       style={style}
-      className={`group/card rounded shadow border px-2 h-10 cursor-pointer flex justify-between items-center bg-gray-50 ${
-        isDragging && "opacity-50"
-      } `}
+      className={`group/card rounded shadow border px-2 h-10 cursor-grab flex justify-between items-center bg-gray-50
+      ${isDragging && "opacity-50"} ${isDragOverlay && "cursor-grabbing"} `}
       {...listeners}
       {...attributes}
     >
