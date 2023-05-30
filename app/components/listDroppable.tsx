@@ -13,12 +13,14 @@ export type ListDroppableProps = {
   title: string;
   cards: CardDraggableProps[];
   activeCardId: string | null;
+  isDragOverlay?: boolean;
 };
 
 const ListDroppableComponent = ({
   title,
   cards = [],
   id,
+  isDragOverlay = false,
 }: ListDroppableProps) => {
   const { setNodeRef } = useDroppable({
     id,
@@ -64,9 +66,9 @@ const ListDroppableComponent = ({
     <div
       ref={setNodeRefSortable}
       style={style}
-      className={`group flex flex-col relative w-60 p-4 rounded max-h-[90vh] h-full overflow-hidden bg-gray-100 ${
+      className={`group flex flex-col relative w-60 p-4 cursor-grab rounded max-h-[90vh] h-full overflow-hidden bg-gray-100 ${
         isDragging && "opacity-50"
-      }`}
+      } ${isDragOverlay && "cursor-grabbing"}`}
       {...listeners}
       {...attributes}
     >
