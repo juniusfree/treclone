@@ -8,7 +8,7 @@ import { ListDroppableProps } from "./listDroppable";
 
 const initialData = [
   {
-    id: "board-1",
+    id: uuidv4(),
     title: "board 1",
     lists: [
       {
