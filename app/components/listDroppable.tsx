@@ -112,7 +112,7 @@ const ListDroppableComponent = ({
           </div>
         )}
         {Boolean(cards.length) && (
-          <div className="flex flex-col gap-2 overflow-scroll">
+          <div className="flex flex-col gap-2 overflow-scroll py-2">
             {cards?.map(({ id, ...props }) => (
               <div key={id}>
                 <CardDraggableComponent id={id} {...props} />
