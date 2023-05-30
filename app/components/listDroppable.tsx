@@ -73,7 +73,7 @@ const ListDroppableComponent = ({
       <SortableContext items={cards}>
         <div ref={setNodeRef}>
           {isEditing ? (
-            <div>
+            <div className="py-4">
               <input
                 className="w-full outline outline-gray-300 p-1 rounded text-sm"
                 type="text"
@@ -87,7 +87,7 @@ const ListDroppableComponent = ({
                   className="text-sm p-1 rounded bg-sky-700 text-white hover:bg-sky-900 disabled:bg-gray-300"
                   disabled={!listTitle}
                 >
-                  Create
+                  Update
                 </button>
                 <button
                   onClick={toggleIsEditing}
