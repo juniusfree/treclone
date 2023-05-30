@@ -2,7 +2,13 @@
 
 import { UniqueIdentifier } from "@dnd-kit/core";
 import { arrayMove } from "@dnd-kit/sortable";
-import { Dispatch, createContext, useContext, useReducer } from "react";
+import {
+  Dispatch,
+  createContext,
+  useContext,
+  useEffect,
+  useReducer,
+} from "react";
 import { v4 as uuidv4 } from "uuid";
 import { ListDroppableProps } from "./listDroppable";
 
@@ -372,6 +378,12 @@ const boardReducer = (
     return boards;
   }
 
+  if (action.type === "load localstorage") {
+    console.log("load localstorage");
+    const { data } = action;
+    return data;
+  }
+
   return boards;
 };
 
@@ -381,6 +393,22 @@ const BoardsContextComponent = ({
   children: React.ReactNode;
 }) => {
   const [boards, dispatch] = useReducer(boardReducer, initialData);
+
+  useEffect(() => {
+    const data = localStorage.getItem("boards");
+    if (data) {
+      dispatch({
+        type: "load localstorage",
+        data: JSON.parse(data),
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    console.log("save localstorage");
+    localStorage.setItem("boards", JSON.stringify(boards));
+  }, [boards]);
+
   return (
     <BoardsContext.Provider value={boards}>
       <BoardDispatcherContext.Provider value={dispatch}>
