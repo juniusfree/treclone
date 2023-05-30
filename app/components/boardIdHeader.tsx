@@ -5,8 +5,11 @@ import { useBoardDispatcherContext } from "./boardsContext";
 
 const BoardIdHeaderComponentWrapper = ({ children }) => {
   return (
-    <div className="group/header bg-sky-50 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
-      {children}
+    <div className=" bg-sky-50 w-full flex items-center justify-between gap-4 h-12 fixed px-4 z-50 ">
+      <div className="group/header flex flex-grow gap-4">{children}</div>
+      <div className="text-sm font-semibold uppercase text-sky-900">
+        <Link href="/">Home</Link>
+      </div>
     </div>
   );
 };
