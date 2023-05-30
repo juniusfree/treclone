@@ -1,7 +1,6 @@
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import AddCard from "./addCard";
 import { useBoardIdContext } from "./boardId";
@@ -106,19 +105,9 @@ const ListDroppableComponent = ({
             >
               {title}
             </p>
-            <div className="flex gap-2 text-sky-900">
-              <button
-                onClick={toggleIsEditing}
-                className="w-4 h-4 hidden group-hover:block"
-              >
-                <PencilIcon />
-              </button>
-              <button
-                onClick={handleOnDelete}
-                className="w-4 h-4 hidden group-hover:block"
-              >
-                <TrashIcon />
-              </button>
+            <div className="gap-2 text-gray-500 hidden group-hover:flex text-sm">
+              <button onClick={toggleIsEditing}>Edit</button>
+              <button onClick={handleOnDelete}>Delete</button>
             </div>
           </div>
         )}

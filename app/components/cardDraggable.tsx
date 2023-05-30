@@ -1,6 +1,5 @@
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { TrashIcon, XMarkIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
 import { useBoardIdContext } from "./boardId";
 import { useBoardDispatcherContext } from "./boardsContext";
@@ -86,7 +85,6 @@ const CardDraggableComponent = ({
 
   return (
     <div
-      onClick={toggleIsEditing}
       ref={setNodeRef}
       style={style}
       className={`group/card rounded shadow border px-2 h-10 cursor-grab flex justify-between items-center bg-gray-50
@@ -95,12 +93,10 @@ const CardDraggableComponent = ({
       {...attributes}
     >
       <p>{title}</p>
-      <button
-        onClick={handleOnDelete}
-        className="w-4 h-4 hidden group-hover/card:block"
-      >
-        <TrashIcon />
-      </button>
+      <div className="gap-2 text-sm text-gray-500 hidden group-hover/card:flex">
+        <button onClick={toggleIsEditing}>Edit</button>
+        <button onClick={handleOnDelete}>Delete</button>
+      </div>
     </div>
   );
 };

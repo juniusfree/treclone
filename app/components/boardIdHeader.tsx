@@ -1,4 +1,3 @@
-import { PencilIcon, TrashIcon } from "@heroicons/react/20/solid";
 import Link from "next/link";
 import { useState } from "react";
 import { useBoardIdContext } from "./boardId";
@@ -67,16 +66,10 @@ const BoardIdHeaderComponent = () => {
       <p onClick={toggleIsEditing} className="cursor-pointer font-semibold">
         {title}
       </p>
-      <div className="flex gap-2">
-        <PencilIcon
-          className="h-4 w-4 cursor-pointer hidden group-hover/header:block text-sky-900"
-          onClick={toggleIsEditing}
-        />
+      <div className="gap-2 hidden group-hover/header:flex items-center text-sky-500 text-sm">
+        <button onClick={toggleIsEditing}>Edit</button>
         <Link href="/">
-          <TrashIcon
-            className="h-4 w-4 cursor-pointer hidden group-hover/header:block text-sky-900"
-            onClick={handleDelete}
-          />
+          <button onClick={handleDelete}>Delete</button>
         </Link>
       </div>
     </BoardIdHeaderComponentWrapper>
