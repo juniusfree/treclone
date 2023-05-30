@@ -4,6 +4,14 @@ import { useState } from "react";
 import { useBoardIdContext } from "./boardId";
 import { useBoardDispatcherContext } from "./boardsContext";
 
+const BoardIdHeaderComponentWrapper = ({ children }) => {
+  return (
+    <div className="group/header bg-sky-50 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
+      {children}
+    </div>
+  );
+};
+
 const BoardIdHeaderComponent = () => {
   const board = useBoardIdContext();
   const dispatch = useBoardDispatcherContext();
@@ -35,7 +43,7 @@ const BoardIdHeaderComponent = () => {
 
   if (isEditing) {
     return (
-      <div className="group/header bg-sky-200 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
+      <BoardIdHeaderComponentWrapper>
         <input
           autoFocus
           className="w-48 outline outline-gray-300 px-1 rounded text-sm h-8"
@@ -50,12 +58,12 @@ const BoardIdHeaderComponent = () => {
         >
           Update
         </button>
-      </div>
+      </BoardIdHeaderComponentWrapper>
     );
   }
 
   return (
-    <div className="group/header bg-sky-200 w-full flex gap-4 h-12 fixed items-center px-4 z-50">
+    <BoardIdHeaderComponentWrapper>
       <p onClick={toggleIsEditing} className="cursor-pointer font-semibold">
         {title}
       </p>
@@ -71,7 +79,7 @@ const BoardIdHeaderComponent = () => {
           />
         </Link>
       </div>
-    </div>
+    </BoardIdHeaderComponentWrapper>
   );
 };
 
