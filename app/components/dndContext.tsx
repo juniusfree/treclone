@@ -109,10 +109,13 @@ const DndContextComponent = () => {
         {activeCardData ? (
           <CardDraggableComponent {...activeCardData} isDragOverlay />
         ) : (
-          <ListDroppableComponent {...activeDraggableList} isDragOverlay />
+          activeDraggableList && (
+            <ListDroppableComponent {...activeDraggableList} isDragOverlay />
+          )
         )}
       </DragOverlay>
     </DndContext>
   );
 };
 export default DndContextComponent;
+

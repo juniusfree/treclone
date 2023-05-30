@@ -3,15 +3,23 @@
 import { useBoardsContext } from "@/app/components/boardsContext";
 import DndContextComponent from "@/app/components/dndContext";
 import { createContext, useContext } from "react";
+import { BoardIdComponentProps } from "@/app/board/[id]/page";
 import BoardIdHeaderComponent from "./boardIdHeader";
 
-type BoardIdComponentProps = {
-  params: {
-    id: string;
-  };
-};
+type BoardIdContextType = {
+  id: any;
+  title: string;
+  lists: {
+    id: any;
+    title: string;
+    cards: {
+      id: any;
+      title: string;
+    }[];
+  }[];
+} | null;
 
-const BoardIdContext = createContext({ id: "", lists: [], title: "" });
+const BoardIdContext = createContext<BoardIdContextType>(null);
 
 export const useBoardIdContext = () => {
   const context = useContext(BoardIdContext);

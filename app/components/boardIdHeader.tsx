@@ -1,9 +1,13 @@
 import Link from "next/link";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useBoardIdContext } from "./boardId";
 import { useBoardDispatcherContext } from "./boardsContext";
 
-const BoardIdHeaderComponentWrapper = ({ children }) => {
+const BoardIdHeaderComponentWrapper = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
   return (
     <div className=" bg-sky-50 w-full flex items-center justify-between gap-4 h-12 fixed px-4 z-50 ">
       <div className="group/header flex flex-grow gap-4">{children}</div>

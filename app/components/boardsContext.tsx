@@ -55,22 +55,28 @@ export const useBoardsContext = () => {
   return context;
 };
 
-const BoardDispatcherContext = createContext<Dispatch<any>>(null);
+const BoardDispatcherContext = createContext<Dispatch<any>>(() => {});
 
 export const useBoardDispatcherContext = () =>
   useContext(BoardDispatcherContext);
 
-const findBoard = (boards, boardId) => {
+const findBoard = (boards: typeof initialData, boardId: string) => {
   const boardIndex = boards.findIndex((board) => board.id === boardId);
   const currentBoard = boards?.[boardIndex];
   return currentBoard;
 };
 
-export const findList = (lists?: ListDroppableProps[], id?: UniqueIdentifier) =>
+export const findList = (lists: ListDroppableProps[], id?: UniqueIdentifier) =>
   lists?.find((list) => list?.cards?.find((card) => card.id === id)) ||
   lists?.find((list) => list.id === id);
 
-const boardReducer = (boardsRaw, action) => {
+const boardReducer = (
+  boardsRaw: typeof initialData,
+  action: {
+    type: string;
+    data: any;
+  }
+) => {
   const boards = [...boardsRaw];
   if (action.type === "add card") {
     console.log("add card");
@@ -114,10 +120,10 @@ const boardReducer = (boardsRaw, action) => {
     );
     const overList = findList(lists, overId);
     const overListIndex = lists.findIndex((list) => list === overList);
-    const overListCards = overList?.cards;
-    const activeDraggableListUpdatedCards = activeDraggableList?.cards.filter(
-      (i) => i.id !== activeDraggableId
-    );
+    const overListCards = overList?.cards || [];
+    const activeDraggableListUpdatedCards =
+      activeDraggableList?.cards.filter((i) => i.id !== activeDraggableId) ||
+      [];
     const overListUpdatedCards = [activeCardData, ...overListCards];
     lists[activeDraggableListIndex] = {
       ...lists[activeDraggableListIndex],
@@ -143,7 +149,7 @@ const boardReducer = (boardsRaw, action) => {
       (board) => board === currentBoard
     );
     const lists = [...currentBoard?.lists];
-    const listToBeUpdated = findList(lists, cardId);
+    const listToBeUpdated = findList(lists, cardId) as ListDroppableProps;
     const listToBeUpdatedIndex = lists?.findIndex(
       (list) => list === listToBeUpdated
     );
@@ -186,7 +192,7 @@ const boardReducer = (boardsRaw, action) => {
     const overListId = overList?.id;
     const activeDraggableList = findList(lists, activeDraggableId);
     const activeDraggableListId = activeDraggableList?.id;
-    const activeDraggableListCards = activeDraggableList?.cards;
+    const activeDraggableListCards = activeDraggableList?.cards || [];
 
     if (activeDraggableListId === overListId) {
       // Handles sorting on the same list
@@ -224,7 +230,7 @@ const boardReducer = (boardsRaw, action) => {
       (board) => board === currentBoard
     );
     const lists = [...currentBoard?.lists];
-    const listToBeUpdated = findList(lists, cardId);
+    const listToBeUpdated = findList(lists, cardId) as ListDroppableProps;
     const listToBeUpdatedIndex = lists?.findIndex(
       (list) => list === listToBeUpdated
     );

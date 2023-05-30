@@ -1,5 +1,13 @@
 import BoardIdComponent from "@/app/components/boardId";
 
-const BoardIdPage = async (props) => <BoardIdComponent {...props} />;
+export type BoardIdComponentProps = {
+  params: {
+    id: string;
+  };
+};
+
+const BoardIdPage = async (props: BoardIdComponentProps) => (
+  <BoardIdComponent {...props} />
+);
 
 export default BoardIdPage;

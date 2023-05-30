@@ -11,7 +11,7 @@ export type ListDroppableProps = {
   id: string;
   title: string;
   cards: CardDraggableProps[];
-  activeCardId: string | null;
+  activeCardId?: string;
   isDragOverlay?: boolean;
 };
 
