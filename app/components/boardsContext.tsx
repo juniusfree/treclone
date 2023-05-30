@@ -8,53 +8,38 @@ import { ListDroppableProps } from "./listDroppable";
 
 const initialData = [
   {
-    id: "1",
+    id: "board-1",
     title: "board 1",
     lists: [
       {
-        id: "list-1",
+        id: uuidv4(),
         title: "List 1",
-        cards: [
-          {
-            id: "card-1",
-            title: "Card 1",
-          },
-        ],
+        cards: Array.from({ length: 20 }).map((_, j) => ({
+          id: uuidv4(),
+          title: `Card ${j}`,
+        })),
       },
       {
-        id: "list-2",
+        id: uuidv4(),
         title: "List 2",
-        cards: [
-          {
-            id: "card-2",
-            title: "Card 2",
-          },
-          {
-            id: "card-4",
-            title: "Card 4",
-          },
-          {
-            id: "card-5",
-            title: "Card 5",
-          },
-        ],
-      },
-      {
-        id: "list-3",
-        title: "List 3",
-        cards: [
-          {
-            id: "card-3",
-            title: "Card 3",
-          },
-        ],
+        cards: Array.from({ length: 5 }).map((_, j) => ({
+          id: uuidv4(),
+          title: `Card ${j}`,
+        })),
       },
     ],
   },
   {
-    id: "2",
+    id: uuidv4(),
     title: "board 2",
-    lists: [],
+    lists: Array.from({ length: 3 }).map((_, i) => ({
+      id: uuidv4(),
+      title: `List ${i}`,
+      cards: Array.from({ length: 20 }).map((_, j) => ({
+        id: uuidv4(),
+        title: `Card ${i}-${j}`,
+      })),
+    })),
   },
 ];
 
