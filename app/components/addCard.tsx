@@ -56,7 +56,7 @@ const AddCard = ({ listId }: { listId: string }) => {
   return (
     <div
       onClick={toggleIsCreating}
-      className="flex items-center hover:bg-gray-200 h-fit p-1 rounded gap-2"
+      className="flex items-center cursor-pointer hover:bg-gray-200 h-fit p-1 rounded gap-2"
     >
       <PlusIcon className="w-4 h-4" /> Add Card
     </div>
