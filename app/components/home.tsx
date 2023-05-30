@@ -23,7 +23,15 @@ const HomeComponent = () => {
   };
   return (
     <div className="flex flex-col gap-8 p-8 w-full">
-      <div className="text-lg font-bold">Treclone</div>
+      <p>
+        <span className="text-lg font-bold">Treclone </span>
+        <span className="text-sm text-gray-500">
+          by{" "}
+          <a className="underline" href="https://github.com/juniusfree">
+            @juniusfree
+          </a>
+        </span>
+      </p>
       <ul className="flex flex-wrap gap-4">
         {boards.map((board) => (
           <li
